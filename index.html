@@ -15,46 +15,20 @@
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js');
         }
-    <script>
-    async function loadData() {
-        const code = document.getElementById('code').value.trim();
-        if (!code) {
-            alert("Введіть код!");
-            return;
+    </script>
+    <style>
+        body {font-family: Arial, sans-serif; text-align: center; background: #fff; color: #000; padding: 20px; margin: 0;}
+        h1 {font-size: 32px;}
+        p {font-size: 18px; line-height: 1.6;}
+        input {font-size: 18px; padding: 12px; width: 80%; max-width: 400px; margin: 20px auto; background: #f0f0f0; border: 1px solid #000; color: #000; border-radius: 8px;}
+        button {font-size: 18px; padding: 12px 30px; background: #ffd700; color: #000; border: none; border-radius: 8px; cursor: pointer;}
+        .expired {color: red; font-size: 24px;}
+        img {max-width: 200px; border-radius: 12px; margin: 20px 0;}
+        .instruction {display: block;}
+        @media (display-mode: standalone), (display-mode: fullscreen) {
+            .instruction {display: none;}
         }
-        const resultDiv = document.getElementById('result');
-        resultDiv.innerHTML = '<p>Завантаження...</p>'; // Показываем, что работает
-
-        try {
-            console.log("Отправляю запрос на ngrok URL с кодом:", code);
-            const res = await fetch(`https://lagomorphic-boredly-kellen.ngrok-free.dev/get_data?code=${code}`);
-            if (!res.ok) {
-                throw new Error(`HTTP ошибка: ${res.status}`);
-            }
-            const data = await res.json();
-            console.log("Ответ от API:", data);
-
-            let html = '';
-            if (data.fio && data.fio.includes("ЗАВЕРШЕНО")) {
-                html = `<p style="color:red;font-size:24px;">${data.fio}</p>`;
-            } else {
-                html = `<h2>Ваші дані</h2>
-                        <p><strong>ПІБ:</strong> ${data.fio || ''}</p>
-                        <p><strong>Дата народження:</strong> ${data.birthdate || ''}</p>
-                        ${data.photo_url ? `<img src="https://lagomorphic-boredly-kellen.ngrok-free.dev${data.photo_url}" alt="Фото" style="max-width:200px;border-radius:12px;margin:20px 0;">` : ''}`;
-            }
-            resultDiv.innerHTML = html;
-        } catch (e) {
-            console.error("Ошибка:", e);
-            resultDiv.innerHTML = '';
-            alert("Помилка з'єднання або невірний код. Перевірте інтернет і код.");
-        }
-    }
-
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js');
-    }
-</script>
+    </style>
 </head>
 <body>
     <div class="instruction">
@@ -71,11 +45,21 @@
     <script>
         async function loadData() {
             const code = document.getElementById('code').value.trim();
-            if (!code) return alert("Введіть код!");
+            if (!code) {
+                alert("Введіть код!");
+                return;
+            }
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Завантаження...</p>';
+
             try {
-                // Замени на свой текущий ngrok URL (если изменился)
+                // ТВОЙ ТЕКУЩИЙ NGROK URL (замени, если изменился после перезапуска ngrok)
                 const res = await fetch(`https://lagomorphic-boredly-kellen.ngrok-free.dev/get_data?code=${code}`);
+                if (!res.ok) {
+                    throw new Error(`HTTP ошибка: ${res.status}`);
+                }
                 const data = await res.json();
+
                 let html = '';
                 if (data.fio && data.fio.includes("ЗАВЕРШЕНО")) {
                     html = `<p class="expired">${data.fio}</p>`;
@@ -83,11 +67,12 @@
                     html = `<h2>Ваші дані</h2>
                             <p><strong>ПІБ:</strong> ${data.fio || ''}</p>
                             <p><strong>Дата народження:</strong> ${data.birthdate || ''}</p>
-                            ${data.photo_url ? `<img src="https://lagomorphic-boredly-kellen.ngrok-free.dev${data.photo_url}" alt="Фото">` : ''} alt="Фото">` : ''}`;
+                            ${data.photo_url ? `<img src="https://lagomorphic-boredly-kellen.ngrok-free.dev${data.photo_url}" alt="Фото">` : ''}`;
                 }
-                document.getElementById('result').innerHTML = html;
+                resultDiv.innerHTML = html;
             } catch (e) {
-                alert("Невірний код або помилка з'єднання");
+                resultDiv.innerHTML = '';
+                alert("Помилка з'єднання або невірний код. Перевірте код і інтернет.");
             }
         }
     </script>
