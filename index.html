@@ -57,7 +57,7 @@
                     html = `<h2>Ваші дані</h2>
                             <p><strong>ПІБ:</strong> ${data.fio || ''}</p>
                             <p><strong>Дата народження:</strong> ${data.birthdate || ''}</p>
-                            ${data.photo_url ? `<img src="https://lagomorphic-boredly-kellen.ngrok-free.dev${data.photo_url}" alt="Фото">` : ''}`;
+                            ${data.photo_url ? `<img src="https://lagomorphic-boredly-kellen.ngrok-free.dev${data.photo_url}" alt="Фото">` : ''} alt="Фото">` : ''}`;
                 }
                 document.getElementById('result').innerHTML = html;
             } catch (e) {
