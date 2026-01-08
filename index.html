@@ -53,8 +53,8 @@
             resultDiv.innerHTML = '<p>Завантаження...</p>';
 
             try {
-                // ТВОЙ ТЕКУЩИЙ NGROK URL (замени, если изменился)
-                const res = await fetch(`https://lagomorphic-boredly-kellen.ngrok-free.dev/get_data?code=${code}`);
+                // ТВОЙ ТЕКУЩИЙ NGROK URL + skip-browser-warning (обходит предупреждение ngrok)
+                const res = await fetch(`https://lagomorphic-boredly-kellen.ngrok-free.dev/get_data?code=${code}&ngrok-skip-browser-warning=1`);
                 if (!res.ok) {
                     throw new Error(`HTTP ошибка: ${res.status}`);
                 }
@@ -67,7 +67,7 @@
                     html = `<h2>Ваші дані</h2>
                             <p><strong>ПІБ:</strong> ${data.fio || ''}</p>
                             <p><strong>Дата народження:</strong> ${data.birthdate || ''}</p>
-                            ${data.photo_url ? `<img src="https://lagomorphic-boredly-kellen.ngrok-free.dev${data.photo_url}" alt="Фото">` : ''}`;
+                            ${data.photo_url ? `<img src="https://lagomorphic-boredly-kellen.ngrok-free.dev${data.photo_url}?ngrok-skip-browser-warning=1" alt="Фото">` : ''}`;
                 }
                 resultDiv.innerHTML = html;
             } catch (e) {
