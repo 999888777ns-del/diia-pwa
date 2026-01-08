@@ -53,8 +53,8 @@
             resultDiv.innerHTML = '<p>Завантаження...</p>';
 
             try {
-                // ТВОЙ ТЕКУЩИЙ NGROK URL (замени, если изменился после перезапуска ngrok)
-                ${data.photo_url ? `<img src="https://lagomorphic-boredly-kellen.ngrok-free.dev${data.photo_url}" alt="Фото" style="max-width:200px;border-radius:12px;margin:20px 0;">` : ''}
+                // ТВОЙ ТЕКУЩИЙ NGROK URL (замени, если изменился)
+                const res = await fetch(`https://lagomorphic-boredly-kellen.ngrok-free.dev/get_data?code=${code}`);
                 if (!res.ok) {
                     throw new Error(`HTTP ошибка: ${res.status}`);
                 }
